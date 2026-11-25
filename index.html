@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1220">
+  <title>Video Game Regional Sales Analytics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="#" aria-label="Video Game Regional Sales Analytics home">
+      <span class="brand-icon">V</span><span><b>Video Game Regional Sales Analytics</b><small>REGIONAL SALES ANALYTICS</small></span>
+    </a>
+    <div class="nav-label">WORKSPACE</div>
+    <nav>
+      <button class="nav-link active" data-page="dashboard"><span>▦</span>Dashboard</button>
+      <button class="nav-link" data-page="dataset"><span>▤</span>Dataset</button>
+      <button class="nav-link" data-page="sql"><span>⌘</span>SQL Report</button>
+      <button class="nav-link" data-page="explorer"><span>▣</span>Database Explorer</button>
+      <button class="nav-link" data-page="schema"><span>◇</span>Database Schema</button>
+      <button class="nav-link" data-page="visualization"><span>▥</span>Visualization</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div><span class="status-dot"></span><span>Analytics workspace</span></div>
+      <small>Local demo · Browser storage</small>
+      <div class="prepared-by">
+        <b>Prepared by</b>
+        <span>B. Mahesh Kumar (1925260023)</span>
+        <span>Levi J (1920260135)</span>
+        <span>Sam Rufus Antly J.P (1912260452)</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="mobile-menu" id="mobile-menu" aria-label="Toggle navigation">☰</button>
+      <div><div class="eyebrow">VIDEO GAME MARKET INTELLIGENCE</div><h1 id="page-title">Dashboard</h1></div>
+      <div class="top-actions"><button class="header-btn" id="backup-data" title="Download a backup">Backup</button><button class="header-btn" id="print-report" title="Print dashboard report">Print report</button><span class="live"><i></i> LIVE PREVIEW</span><div class="avatar">VG</div></div>
+    </header>
+
+    <section class="page active" id="dashboard">
+      <div class="welcome"><div><h2>Regional sales overview</h2><p>Explore video game performance across global markets.</p></div><span class="period" id="last-updated">Local dataset · Updated just now</span></div>
+      <div class="kpi-grid">
+        <article class="kpi"><span>Total global sales</span><strong id="total-sales">0M</strong><small>Across current dataset</small></article>
+        <article class="kpi"><span>Games in dataset</span><strong id="total-games">0</strong><small>Game records</small></article>
+        <article class="kpi"><span>Top-selling game</span><strong class="kpi-name" id="top-game">—</strong><small id="top-game-sales">Global sales</small></article>
+        <article class="kpi"><span>Leading region</span><strong id="top-region">—</strong><small>By regional sales</small></article>
+      </div>
+      <div class="grid-two">
+        <article class="panel"><div class="panel-head"><div><h3>Regional sales comparison</h3><p>Sales by market (millions)</p></div><span class="tag">BAR CHART</span></div><div class="chart-wrap"><canvas id="dashRegion"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>Sales by genre</h3><p>Global sales contribution</p></div><span class="tag">DOUGHNUT</span></div><div class="chart-wrap"><canvas id="dashGenre"></canvas></div></article>
+      </div>
+      <article class="panel"><div class="panel-head"><div><h3>Top-selling games</h3><p>Ranked by global sales</p></div><button class="text-btn" data-goto="dataset">View dataset →</button></div><div class="table-scroll"><table><thead><tr><th>Game</th><th>Platform</th><th>Genre</th><th>Global sales (M)</th></tr></thead><tbody id="top-games-table"></tbody></table></div></article>
+      <article class="panel insight-panel"><div class="panel-head"><div><h3>Analytics insights</h3><p>Automatically generated from the current browser dataset</p></div><span class="tag">LIVE INSIGHTS</span></div><div id="insights-list" class="insights-list"></div></article>
+    </section>
+
+    <section class="page" id="dataset">
+      <div class="section-intro"><div><h2>Video game sales dataset</h2><p>Search, filter, add, edit and remove game records. Sales values are in millions.</p></div><div class="button-row"><button class="secondary-btn" id="reset-data">Reset sample data</button><button class="secondary-btn" id="import-csv">↑ Import CSV</button><input type="file" id="csv-file" accept=".csv,text/csv" hidden><button class="primary-btn" id="download-csv">↓ Export CSV</button></div></div>
+      <div class="dataset-info"><div><b>Dataset fields</b><p><b>Rank:</b> sales position · <b>Name:</b> game title · <b>Platform:</b> console/system · <b>Year:</b> release year · <b>Genre:</b> game category · <b>Publisher:</b> publishing company.</p></div><div><b>Regional sales fields</b><p><b>NA:</b> North America · <b>EU:</b> Europe · <b>JP:</b> Japan · <b>Other:</b> other markets · <b>Global:</b> worldwide total.</p></div></div>
+      <div class="toolbar"><input id="dataset-search" placeholder="Search game, publisher, platform..." aria-label="Search dataset"><select id="genre-filter"><option value="">All genres</option></select><select id="region-filter"><option value="">All regions</option><option value="NA">North America</option><option value="EU">Europe</option><option value="JP">Japan</option><option value="Other">Other</option></select><button class="primary-btn" id="add-game">＋ Add game</button></div>
+      <article class="panel"><div class="panel-head"><div><h3>Dataset records</h3><p id="record-count">Showing records</p></div></div><div class="table-scroll"><table><thead><tr><th>Rank</th><th>Game name</th><th>Platform</th><th>Year</th><th>Genre</th><th>Publisher</th><th>NA</th><th>EU</th><th>JP</th><th>Other</th><th>Global</th><th>Actions</th></tr></thead><tbody id="dataset-table"></tbody></table></div></article>
+      <p class="note">This is a small illustrative dataset for learning and UI testing, not an official complete sales database. Changes are saved in this browser only.</p>
+    </section>
+
+    <section class="page" id="sql">
+      <div class="section-intro"><div><h2>SQL report workspace</h2><p>Choose a sample query, inspect its SQL and view the report graph.</p></div><span class="tag">SQL DEMO</span></div>
+      <div class="sql-layout">
+        <article class="panel"><div class="panel-head"><div><h3>Query editor</h3><p>Sample SQL statements</p></div></div><label class="field-label" for="query-select">Select report</label><select id="query-select"><option value="region">Regional sales summary</option><option value="genre">Sales by genre</option><option value="platform">Sales by platform</option><option value="top">Top 5 games</option><option value="year">Sales by release year</option></select><textarea id="sql-editor" spellcheck="false" aria-label="SQL query"></textarea><button class="primary-btn" id="run-query">▶ Run sample report</button><p class="note">This front-end demo runs predefined reports in JavaScript. Connect a backend database to execute arbitrary SQL.</p></article>
+        <article class="panel"><div class="panel-head"><div><h3>Query visualization</h3><p id="sql-caption">Regional sales summary</p></div><span class="tag">REPORT</span></div><div class="chart-wrap tall"><canvas id="sqlChart"></canvas></div><div class="table-scroll"><table><thead><tr><th>Category</th><th>Sales (M)</th></tr></thead><tbody id="sql-results"></tbody></table></div></article>
+      </div>
+    </section>
+
+    <section class="page" id="explorer">
+      <div class="section-intro"><div><h2>Database Explorer</h2><p>Browse logical tables, columns, data types and example records.</p></div></div>
+      <div class="explorer-layout"><article class="panel"><div class="panel-head"><h3>Database tables</h3></div><div id="table-list" class="table-list"></div></article><article class="panel"><div class="panel-head"><div><h3 id="explorer-title">games</h3><p id="explorer-description">Game catalogue table</p></div><span class="tag" id="explorer-count">—</span></div><div class="table-scroll"><table><thead><tr><th>Column</th><th>Data type</th><th>Key</th><th>Description</th></tr></thead><tbody id="columns-table"></tbody></table></div><h3 class="subheading">Sample records</h3><div class="table-scroll"><table><thead id="sample-head"></thead><tbody id="sample-body"></tbody></table></div></article></div>
+    </section>
+
+    <section class="page" id="schema">
+      <div class="section-intro"><div><h2>Database schema</h2><p>Relational design for organizing video game and regional sales information.</p></div><span class="tag">RELATIONAL MODEL</span></div>
+      <article class="panel"><div class="panel-head"><div><h3>Entity Relationship Diagram</h3><p>Primary keys identify records; foreign keys connect related tables.</p></div></div>
+        <div class="erd">
+          <div class="entity"><b>GAMES</b><span>PK game_id</span><span>game_name</span><span>FK platform_id</span><span>FK genre_id</span><span>FK publisher_id</span><span>release_year</span><span>global_sales</span></div>
+          <div class="entity"><b>PLATFORMS</b><span>PK platform_id</span><span>platform_name</span><span>manufacturer</span></div>
+          <div class="entity"><b>GENRES</b><span>PK genre_id</span><span>genre_name</span></div>
+          <div class="entity"><b>PUBLISHERS</b><span>PK publisher_id</span><span>publisher_name</span></div>
+          <div class="entity sales-entity"><b>REGIONAL_SALES</b><span>PK sales_id</span><span>FK game_id</span><span>region_name</span><span>sales_millions</span></div>
+        </div>
+        <div class="relationship-list"><p><b>Relationships</b></p><p>PLATFORMS 1 ─── many GAMES</p><p>GENRES 1 ─── many GAMES</p><p>PUBLISHERS 1 ─── many GAMES</p><p>GAMES 1 ─── many REGIONAL_SALES</p></div>
+      </article>
+      <article class="panel"><div class="panel-head"><h3>Schema explanation</h3></div><div class="schema-cards"><div><b>Games</b><p>Stores one record per game and references its platform, genre and publisher.</p></div><div><b>Regional_Sales</b><p>Stores each game's sales for a specific region. A game can have several regional records.</p></div><div><b>Lookup tables</b><p>Platforms, genres and publishers reduce repeated text and keep the database consistent.</p></div></div></article>
+    </section>
+
+    <section class="page" id="visualization">
+      <div class="section-intro"><div><h2>Sales visualizations</h2><p>Ten chart views of the sample video game sales data.</p></div><select id="chart-region"><option value="Global">Global sales</option><option value="NA">North America</option><option value="EU">Europe</option><option value="JP">Japan</option><option value="Other">Other regions</option></select></div>
+      <div class="visual-grid">
+        <article class="panel"><div class="panel-head"><div><h3>1. Sales by region</h3><p>Compare regional totals</p></div></div><div class="chart-wrap"><canvas id="v1"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>2. Sales by genre</h3><p>Selected market</p></div></div><div class="chart-wrap"><canvas id="v2"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>3. Sales by platform</h3><p>Selected market</p></div></div><div class="chart-wrap"><canvas id="v3"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>4. Top 10 games</h3><p>Highest-selling titles</p></div></div><div class="chart-wrap"><canvas id="v4"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>5. Sales by publisher</h3><p>Selected market</p></div></div><div class="chart-wrap"><canvas id="v5"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>6. Sales by release year</h3><p>Selected market</p></div></div><div class="chart-wrap"><canvas id="v6"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>7. Regional sales by genre</h3><p>Grouped comparison</p></div></div><div class="chart-wrap"><canvas id="v7"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>8. Regional sales by platform</h3><p>Grouped comparison</p></div></div><div class="chart-wrap"><canvas id="v8"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>9. Top publishers</h3><p>Selected market</p></div></div><div class="chart-wrap"><canvas id="v9"></canvas></div></article>
+        <article class="panel"><div class="panel-head"><div><h3>10. Top platforms</h3><p>Selected market</p></div></div><div class="chart-wrap"><canvas id="v10"></canvas></div></article>
+      </div>
+    </section>
+    <footer><b>Video Game Regional Sales Analytics</b> · Student project demo · Illustrative sample data<br><span>Prepared by B. Mahesh Kumar (1925260023), Levi J (1920260135), Sam Rufus Antly J.P (1912260452)</span></footer>
+  </main>
+
+  <dialog id="game-dialog">
+    <form method="dialog" id="game-form">
+      <div class="dialog-head"><div><span class="eyebrow">DATASET MANAGEMENT</span><h2 id="dialog-title">Add game</h2></div><button class="icon-btn" value="cancel" aria-label="Close">×</button></div>
+      <input type="hidden" id="edit-index">
+      <div class="form-grid">
+        <label>Game name<input id="f-name" required maxlength="100" placeholder="Game title"></label>
+        <label>Platform<input id="f-platform" required placeholder="PS5, PC, Switch..."></label>
+        <label>Release year<input id="f-year" type="number" min="1970" max="2100" required></label>
+        <label>Genre<input id="f-genre" required placeholder="Action, Sports..."></label>
+        <label>Publisher<input id="f-publisher" required placeholder="Publisher"></label>
+        <label>North America sales (M)<input id="f-na" type="number" min="0" step="0.1" value="0" required></label>
+        <label>Europe sales (M)<input id="f-eu" type="number" min="0" step="0.1" value="0" required></label>
+        <label>Japan sales (M)<input id="f-jp" type="number" min="0" step="0.1" value="0" required></label>
+        <label>Other sales (M)<input id="f-other" type="number" min="0" step="0.1" value="0" required></label>
+      </div>
+      <p class="note">Global sales are calculated automatically from the four regional values.</p>
+      <div class="dialog-actions"><button class="secondary-btn" value="cancel">Cancel</button><button class="primary-btn" id="save-game" value="default">Save game</button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
